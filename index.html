@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Screener AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #475569;
+      --accent: #3b82f6;
+      --background: #0f172a;
+      --text: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-border: rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes glitch {
+      0% {
+        clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%);
+        transform: translate(20px);
+      }
+      20% {
+        clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%);
+        transform: translate(-20px);
+      }
+      40% {
+        clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%);
+        transform: translate(15px);
+      }
+      60% {
+        clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%);
+        transform: translate(-15px);
+      }
+      80% {
+        clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+        transform: translate(0);
+      }
+      100% {
+        clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+        transform: translate(0);
+      }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 0.5; }
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f172a, #1e3a8a);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    .glitch-circle {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .glitch-circle:nth-child(1) { top: 10%; left: 10%; }
+    .glitch-circle:nth-child(2) { top: 50%; right: 10%; animation-delay: -2s; }
+    .glitch-circle:nth-child(3) { bottom: 10%; left: 30%; animation-delay: -4s; }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .logo {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      text-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+      letter-spacing: -0.5px;
+    }
+
+    .navbar .logo span {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover {
+      opacity: 1;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .main-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .upload-container {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      margin-bottom: 3rem;
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      transition: all 0.4s ease;
+    }
+
+    .upload-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--primary-dark);
+      margin: 0 0 2rem 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 1.5rem;
+      display: block;
+      color: var(--primary-dark);
+      font-size: 1.1rem;
+    }
+
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 0.75rem;
+      border: 2px solid rgba(37, 99, 235, 0.1);
+      border-radius: 12px;
+      resize: vertical;
+      background: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    textarea {
+      min-height: 120px;
+    }
+
+    input[type="file"]:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(45deg);
+      animation: shine 6s infinite;
+    }
+
+    .feedback-section {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+    }
+
+    .feedback-card {
+      background: rgba(248, 250, 252, 0.9);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      border: 1px solid rgba(226, 232, 240, 0.5);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .feedback-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .feedback-card h3 {
+      margin: 0 0 1rem 0;
+      color: var(--primary-dark);
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feedback-card ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .feedback-card li {
+      margin: 0.75rem 0;
+      color: var(--secondary);
+      line-height: 1.6;
+    }
+
+    .compatibility-score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin: 1.5rem 0;
+      text-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .chat-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 380px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 600px;
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .chat-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .chat-messages {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex-grow: 1;
+      max-height: 400px;
+    }
+
+    .message {
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message.user {
+      align-items: flex-end;
+    }
+
+    .message.bot {
+      align-items: flex-start;
+    }
+
+    .message-content {
+      padding: 1rem 1.25rem;
+      border-radius: 1.5rem;
+      max-width: 85%;
+      line-height: 1.5;
+      animation: messageAppear 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .user .message-content {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-bottom-right-radius: 0.5rem;
+    }
+
+    .bot .message-content {
+      background: rgba(243, 244, 246, 0.9);
+      border-bottom-left-radius: 0.5rem;
+      color: var(--secondary);
+    }
+
+    .chat-input {
+      padding: 1.25rem;
+      border-top: 1px solid rgba(229, 231, 235, 0.5);
+      display: flex;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid rgba(229, 231, 235, 0.5);
+      border-radius: 12px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .chat-input input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .chat-input button {
+      margin: 0;
+      padding: 0.75rem 1.5rem;
+      width: auto;
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
+    .minimize-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      width: auto;
+      font-size: 1.5rem;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .minimize-btn:hover {
+      transform: scale(1.1);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 4rem;
+      }
+
+      nav ul {
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 0 1rem;
+        margin: 2rem auto;
+      }
+
+      .upload-container,
+      .feedback-section {
+        padding: 2rem;
+        border-radius: 20px;
+      }
+
+      .chat-container {
+        width: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 24px 24px 0 0;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .navbar {
+        padding: 1rem;
+      }
+
+      .navbar .logo {
+        font-size: 1.5rem;
+      }
+
+      nav ul {
+        gap: 1.5rem;
+      }
+    }
+
+    @keyframes messageAppear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="glitch-circle"></div>
+  <div class="glitch-circle"></div>
+  <div class="glitch-circle"></div>
+
+  <header>
+    <div class="navbar">
+      <div class="logo">Resume Screener<span> AI</span></div>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Upload</a></li>
+          <li><a href="#">How it Works</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div class="upload-container">
+      <h1>🧠 Resume Screener AI</h1>
+      <form action="/match" method="POST" enctype="multipart/form-data">
+        <label for="resume">📄 Upload Resume (PDF)</label>
+        <input type="file" id="resume" name="resume" accept=".pdf" required />
+
+        <label for="jobdesc">📝 Paste Job Description</label>
+        <textarea id="jobdesc" name="jobdesc" rows="6" placeholder="Enter the job description here..." required></textarea>
+
+        <button type="submit">🔍 Analyze Resume</button>
+      </form>
+    </div>
+
+    <div class="feedback-section">
+  <h2>🧠 Smart Resume Suggestions</h2>
+
+  <!-- Compatibility Score Card -->
+  <div class="feedback-card">
+    <h3>📊 Compatibility Score</h3>
+    <div class="compatibility-score">{{ score }}%</div>
+    <p>
+      {% if score is defined and score >= 80 %}
+        ✅ <strong>Excellent match!</strong> Your resume aligns well with the job requirements. You’re likely a top candidate.
+      {% elif score is defined and score >= 50 %}
+        ⚠️ <strong>Moderate match.</strong> You meet many requirements, but there's room for improvement.
+      {% else %}
+        ❌ <strong>Low compatibility.</strong> Consider tailoring your resume more closely to the job.
+      {% endif %}
+    </p>
+    <p><em>Based on skill overlap between your resume and the job description.</em></p>
+  </div>
+
+  <!-- Matched Skills -->
+  <div class="feedback-card">
+    <h3>✅ Skills That Match</h3>
+    {% if matched %}
+      <ul>
+        {% for skill in matched %}
+          <li>{{ skill }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No major skills matched. Consider aligning your resume more with the job's keywords.</p>
+    {% endif %}
+  </div>
+
+  <!-- Unmatched Skills -->
+  <div class="feedback-card">
+    <h3>❌ Missing or Unmatched Skills</h3>
+    {% if missing %}
+      <ul>
+        {% for skill in missing %}
+          <li>{{ skill }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You seem to have all the necessary skills for this role. Great job!</p>
+    {% endif %}
+  </div>
+
+  <!-- LLM Feedback Summary -->
+  <div class="feedback-card">
+    <h3>📝 AI Feedback Summary</h3>
+    <p>{{ feedback }}</p>
+  </div>
+
+  <!-- Recommendations Section -->
+  <div class="feedback-card">
+    <h3>📌 Recommendations</h3>
+    <ul>
+      <li>Include specific examples of projects where you applied your key skills.</li>
+      <li>Highlight any leadership, collaboration, or communication experience.</li>
+      <li>Ensure formatting is consistent and professional (e.g., bullet points, alignment).</li>
+      <li>Tailor your objective/summary to match the job’s goals or industry.</li>
+    </ul>
+  </div>
+</div>
+
+  <!-- Chatbot Interface -->
+  <div class="chat-container">
+    <div class="chat-header">
+      <h3>Resume Assistant</h3>
+      <button class="minimize-btn">−</button>
+    </div>
+    <div class="chat-messages">
+      <div class="message bot">
+        <div class="message-content">
+          Hello! I'm your Resume Assistant. How can I help you improve your resume today?
+        </div>
+      </div>
+      <div class="message user">
+        <div class="message-content">
+          Can you help me improve my skills section?
+        </div>
+      </div>
+      <div class="message bot">
+        <div class="message-content">
+          I'd be happy to help! Based on the job description, I recommend focusing on your technical skills, particularly in C Programming and Python. Would you like specific suggestions?
+        </div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Type your message..." />
+      <button>Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Toggle chat window visibility
+    document.querySelector('.minimize-btn').addEventListener('click', function () {
+      const chatMessages = document.querySelector('.chat-messages');
+      const chatInput = document.querySelector('.chat-input');
+      if (chatMessages.style.display === 'none') {
+        chatMessages.style.display = 'block';
+        chatInput.style.display = 'flex';
+        this.textContent = '−';
+      } else {
+        chatMessages.style.display = 'none';
+        chatInput.style.display = 'none';
+        this.textContent = '+';
+      }
+    });
+  
+    // Grab DOM elements
+    const chatInputField = document.querySelector('.chat-input input');
+    const chatButton = document.querySelector('.chat-input button');
+    const chatMessages = document.querySelector('.chat-messages');
+  
+    // Append a new message to the chat window
+    function addMessage(message, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+      messageDiv.innerHTML = `<div class="message-content">${message}</div>`;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  
+    // Handle sending a chat message
+    async function handleChat() {
+      const message = chatInputField.value.trim();
+      if (!message) return;
+  
+      // Display user's message
+      addMessage(message, true);
+      chatInputField.value = '';
+  
+      // Display a temporary loading message
+      addMessage("Thinking...", false);
+      console.log("Starting..")
+  
+      try {
+        // Call the Flask backend, which in turn calls the Groq API
+
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message }),
+        });
+        console.log('got response..')
+        const data = await response.json();
+        const botMessage = data.response;
+        
+        // Replace the temporary "Thinking..." message with the real response
+        document.querySelector('.message.bot:last-child .message-content').textContent = botMessage;
+      } catch (error) {
+        // In case of an error, notify the user
+        document.querySelector('.message.bot:last-child .message-content').textContent = "Sorry, something went wrong. Please try again.";
+        console.error('Error fetching chat response:', error);
+      }
+    }
+  
+    // Event listeners for sending messages
+    chatButton.addEventListener('click', handleChat);
+    chatInputField.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') handleChat();
+    });
+  </script>
+  
+</body>
+</html>

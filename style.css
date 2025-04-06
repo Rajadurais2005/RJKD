@@ -1,0 +1,256 @@
+/* Import a modern font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #333;
+  .result-card, .ai-feedback {
+    background: #f5f9ff;
+    border-left: 5px solid #4285f4;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%;
+    font-family: 'Segoe UI', sans-se=rif;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .ai-feedback {
+    background: #fffbe6;
+    border-left-color: #f0c000;
+    white-space: pre-wrap;
+  }
+  
+}
+
+.container {
+  background-color: #ffffffdd;
+  padding: 2.5rem;
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #4b0082;
+  margin-bottom: 1rem;
+}
+
+form {
+  margin-top: 1rem;
+}
+
+label {
+  display: block;
+  margin-top: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+input[type="file"],
+textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+input[type="file"]:hover,
+textarea:focus {
+  border-color: #6366f1;
+  background-color: #fff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+button {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right, #5a67d8, #6b46c1);
+  transform: scale(1.02);
+}
+
+.feedback {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: #e0f7fa;
+  border-left: 6px solid #00acc1;
+  border-radius: 12px;
+  color: #004d40;
+  white-space: pre-wrap;
+  font-size: 1rem;
+}
+
+
+/* Header */
+header {
+  width: 100%;
+  background: #101010;
+  padding: 15px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+}
+
+.navbar {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #00bfff;
+}
+.logo span {
+  color: #007bff;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+nav ul li a {
+  text-decoration: none;
+  color: #f1f1f1;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+nav ul li a:hover {
+  color: #00bfff;
+}
+
+/* Shift content below fixed header */
+.container {
+  margin-top: 100px;
+}
+
+
+.feedback-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  color: #f1f1f1;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.feedback-section h2 {
+  color: #00bfff;
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.feedback-card {
+  background-color: #1a1a1a;
+  border-left: 5px solid #007bff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.feedback-card h3 {
+  color: #00bfff;
+  margin-bottom: 10px;
+}
+
+.feedback-card ul {
+  list-style: disc inside;
+  padding-left: 15px;
+  line-height: 1.6;
+}
+
+.feedback-card p {
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+.feedback-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.feedback-section h2 {
+  color: #00bfff;
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.feedback-card {
+  background-color: #fef3c7; /* default light yellow */
+  border-left: 6px solid #007bff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  color: #333;
+}
+
+.feedback-card h3 {
+  color: #111;
+  margin-bottom: 10px;
+}
+
+.feedback-card ul {
+  list-style: disc inside;
+  padding-left: 15px;
+  line-height: 1.6;
+}
+
+.feedback-card p {
+  margin-bottom: 10px;
+}
+
+.yellow-bg {
+  background-color: #fff3cd; /* soft yellow */
+  border-left-color: #ffc107; /* gold-ish left border */
+}
