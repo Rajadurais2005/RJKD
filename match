@@ -1,0 +1,2 @@
+resume_text = extract_text_from_pdf(resume_path)
+feedback = analyze_resume(resume_text, jd_text)
